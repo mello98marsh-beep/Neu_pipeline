@@ -121,13 +121,14 @@ def run_example_pipeline():
             '--model_name', 'dinov2_vits14',
             '--tau', '0.2',
             '--log_level', 'INFO',
-            '--continue_on_error'
+            '--continue_on_error',
+            '--test_mode'  # Use test mode to avoid downloading model
         ]
         
         print("Running pipeline with arguments:")
         print(f"  Input: {input_dir}")
         print(f"  Output: {output_dir}")
-        print(f"  Model: dinov2_vits14")
+        print(f"  Model: dinov2_vits14 (test mode)")
         print(f"  Threshold (tau): 0.2")
         print("\n" + "-" * 70 + "\n")
         

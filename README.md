@@ -126,6 +126,7 @@ python dinov2_tokencut_pipeline.py \
 
 ### Processing Options
 
+- `--test_mode`: Run with mock DINOv2 model for testing without downloading (useful for CI/testing)
 - `--continue_on_error`: Continue processing if an image fails
 - `--log_level`: Logging verbosity (default: `INFO`)
   - Options: `DEBUG`, `INFO`, `WARNING`, `ERROR`
@@ -207,6 +208,11 @@ The pipeline consists of five modular components:
 
 ## Examples
 
+### Quick test with sample data:
+```bash
+python example.py
+```
+
 ### Process a single object category:
 ```bash
 python dinov2_tokencut_pipeline.py \
@@ -231,6 +237,14 @@ python dinov2_tokencut_pipeline.py \
     --output_dir ./debug_output \
     --log_level DEBUG \
     --continue_on_error
+```
+
+### Test mode without downloading models:
+```bash
+python dinov2_tokencut_pipeline.py \
+    --input_dir ./test_images \
+    --output_dir ./test_output \
+    --test_mode
 ```
 
 ## Citation
