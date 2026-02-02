@@ -58,19 +58,7 @@ class DINOv2FeatureExtractor:
         
         try:
             # Load DINOv2 model from torch hub
-            # Try with trust_repo first for environments with network restrictions
-            try:
-                self.model = torch.hub.load('facebookresearch/dinov2', model_name, trust_repo=True)
-            except Exception as hub_error:
-                self.logger.warning(f"torch.hub.load failed: {hub_error}")
-                self.logger.info("Attempting alternative loading method...")
-                
-                # Try loading without validation as fallback
-                import torch.hub as hub
-                hub._validate_not_a_forked_repo = lambda a, b, c: True  # Bypass validation
-                self.model = torch.hub.load('facebookresearch/dinov2', model_name, 
-                                            source='github', force_reload=False)
-            
+            self.model = torch.hub.load('facebookresearch/dinov2', model_name)
             self.model = self.model.to(self.device)
             self.model.eval()
             
@@ -83,6 +71,7 @@ class DINOv2FeatureExtractor:
             self.logger.error("Please ensure you have internet access and/or the model is cached.")
             self.logger.error("You can pre-download models by running:")
             self.logger.error("  python -c \"import torch; torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')\"")
+            self.logger.error("Alternatively, use --test_mode flag for testing without the model.")
             raise
     
     def _init_mock_model(self):
@@ -440,7 +429,9 @@ class ObjectLocalizationPipeline:
             ]
         )
         
-        logging.info(f"Logging initialized. Log file: {log_file}")
+        # Log after configuration is complete
+        logger = logging.getLogger(__name__)
+        logger.info(f"Logging initialized. Log file: {log_file}")
     
     def get_image_paths(self) -> List[Path]:
         """

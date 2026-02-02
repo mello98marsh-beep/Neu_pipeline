@@ -63,14 +63,24 @@ def test_argument_parser():
     try:
         import dinov2_tokencut_pipeline as pipeline
         
-        # Test with minimal required arguments
-        sys.argv = [
-            'test',
+        # Create parser and parse with explicit arguments
+        parser = pipeline.argparse.ArgumentParser()
+        # Manually add arguments to avoid calling parse_arguments
+        args = pipeline.parse_arguments.__wrapped__ if hasattr(pipeline.parse_arguments, '__wrapped__') else None
+        
+        # Alternative approach: parse with explicit args list
+        test_args = [
             '--input_dir', '/tmp/test_input',
             '--output_dir', '/tmp/test_output'
         ]
         
-        args = pipeline.parse_arguments()
+        # Temporarily save and restore sys.argv
+        original_argv = sys.argv.copy()
+        try:
+            sys.argv = ['test'] + test_args
+            args = pipeline.parse_arguments()
+        finally:
+            sys.argv = original_argv
         
         assert args.input_dir == '/tmp/test_input'
         assert args.output_dir == '/tmp/test_output'

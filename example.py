@@ -113,18 +113,6 @@ def run_example_pipeline():
             print("Make sure the script is in the same directory.")
             return 1
         
-        # Prepare arguments
-        sys.argv = [
-            'example',
-            '--input_dir', str(input_dir),
-            '--output_dir', str(output_dir),
-            '--model_name', 'dinov2_vits14',
-            '--tau', '0.2',
-            '--log_level', 'INFO',
-            '--continue_on_error',
-            '--test_mode'  # Use test mode to avoid downloading model
-        ]
-        
         print("Running pipeline with arguments:")
         print(f"  Input: {input_dir}")
         print(f"  Output: {output_dir}")
@@ -133,10 +121,26 @@ def run_example_pipeline():
         print("\n" + "-" * 70 + "\n")
         
         try:
-            # Run the pipeline
-            args = pipeline.parse_arguments()
-            pipe = pipeline.ObjectLocalizationPipeline(args)
-            pipe.run()
+            # Run the pipeline with explicit arguments
+            # Temporarily save and restore sys.argv to avoid side effects
+            original_argv = sys.argv.copy()
+            try:
+                sys.argv = [
+                    'example',
+                    '--input_dir', str(input_dir),
+                    '--output_dir', str(output_dir),
+                    '--model_name', 'dinov2_vits14',
+                    '--tau', '0.2',
+                    '--log_level', 'INFO',
+                    '--continue_on_error',
+                    '--test_mode'
+                ]
+                
+                args = pipeline.parse_arguments()
+                pipe = pipeline.ObjectLocalizationPipeline(args)
+                pipe.run()
+            finally:
+                sys.argv = original_argv
             
             print("\n" + "-" * 70)
             print("\n✓ Pipeline completed successfully!\n")
