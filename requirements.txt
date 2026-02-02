@@ -1,0 +1,16 @@
+# Core dependencies for DINOv2 + TokenCut Pipeline
+
+# PyTorch (install with appropriate CUDA version if needed)
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Computer Vision
+opencv-python-headless>=4.8.0
+Pillow>=10.0.0
+
+# Scientific Computing
+numpy>=1.24.0
+scipy>=1.11.0
+
+# Utilities
+tqdm>=4.65.0
